@@ -1,5 +1,6 @@
 ----
-sight|sound is a collection of programs (really just python and puredata) that 
-convert the brightness values of a webcam into sounds. Ideally, this would
-allow someone to navigate a well contrasted environment blindfolded.
+sight|sound is a pair of programs (a python script and a puredata patch)
+that convert the brightness values of a webcam into sounds. Ideally, 
+this would allow someone to navigate a well contrasted environment
+blindfolded.
 ----
