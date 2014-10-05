@@ -51,7 +51,6 @@ def map_intensities_to_dists(dist_list):
 def map_intensities_to_ear_lists():
     left, right = init_ear_dists()
     return map_intensities_to_dists(left), map_intensities_to_dists(right)
-    
 
 def euclid_2d_dist(x1, y1, x2, y2):
     return sqrt((x2 - x1)**2 + (y2 - y1)**2)

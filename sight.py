@@ -9,19 +9,15 @@ import numpy
 from numpy import zeros
 from itertools import product
 
+#local imports:
+from volume_mapping import *
+
 V_DIVS = 12
 HOST = '127.0.0.1'
 PORT = 1119
 
 def get_2d_list_slice(matrix, start_row, end_row, start_col, end_col):
     return [row[start_col:end_col] for row in matrix[start_row:end_row]]
-
-
-
-#a_list = [40, 40, 45, 45]
-#b_list = [50, 53, 53, 45, 45]
-#c_list = [47, 47, 27, 27, 25, 25, 27]
-#d_list = [45, 47, 36, 27, 66, 25, 25, 25]
 
 def random_list(length):
     return [[round(random()) for i in range(length)] for i in range(length)]
@@ -39,7 +35,6 @@ def init_channel_vals(v_divs, DEBUG = 0):
 def v_bar_index_list_init(v_divs):
     v_bar_index_list = [0] + [i for i in range(0, v_divs)] + [i for i in range(v_divs)][::-1]
     return v_bar_index_list
-
 
 def main():
     # Sockets init:
@@ -68,10 +63,11 @@ def main():
     hv_tuple_products = [i for i in product(vert_tuples, horiz_tuples)]
 
     #Puredata and sound channels init
-    left_channel_vals, right_channel_vals = init_channel_vals(V_DIVS)
+    #left_channel_vals, right_channel_vals = init_channel_vals(V_DIVS)
+    left_channel_vals, right_channel_vals = map_intensities_to_ear_lists()
     vertical_bar_num = 0
     v_bar_index_list = v_bar_index_list_init(V_DIVS)
-    randlist = random_list(V_DIVS) 
+    #randlist = random_list(V_DIVS) 
 
     while(rval):
         #opencv get frame/keygrabbing:
