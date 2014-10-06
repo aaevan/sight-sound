@@ -34,7 +34,14 @@ def init_channel_vals(v_divs, DEBUG = 0):
 
 def v_bar_index_list_init(v_divs):
     v_bar_index_list = [0] + [i for i in range(0, v_divs)] + [i for i in range(v_divs)][::-1]
+    #v_bar_index_list = [0] + [i for i in range(0, v_divs)] + [i for i in range(v_divs)][::-1]
     return v_bar_index_list
+
+def drawtest(frame):
+    for i in np.linspace(0, frame.shape[1], 13):
+        cv2.line(frame, (int(i), 0), (int(i), 480), (255, 255, 255))
+    for j in np.linspace(0, frame.shape[0], 13):
+        cv2.line(frame, (0, int(j)), (640, int(j)), (255, 255, 255))
 
 def main():
     # Sockets init:
@@ -67,15 +74,12 @@ def main():
     left_channel_vals, right_channel_vals = map_intensities_to_ear_lists()
     vertical_bar_num = 0
     v_bar_index_list = v_bar_index_list_init(V_DIVS)
+    print v_bar_index_list
     #randlist = random_list(V_DIVS) 
-
     while(rval):
         #opencv get frame/keygrabbing:
         cv2.imshow("preview", frame)
         rval, frame = vc.read()
-        key = cv2.waitKey(5)
-        if key == 27:
-            break
         #clearing out/initializing old values:
         val_grid = zeros((12, 12))
         y = 0
@@ -84,13 +88,14 @@ def main():
             start_row, end_row = tuple_pair[0]
             start_col, end_col = tuple_pair[1]
             list_slice_2d = get_2d_list_slice(frame, start_row, end_row, start_col, end_col)
-            val_grid[y][x] = int(numpy.asarray(list_slice_2d).mean()) * 10 / 255
+            val_grid[y][x] = int(numpy.asarray(list_slice_2d).mean()) * 20 / 255
             x += 1
             if x % hdivs == 0:
                 x = 0
                 y += 1
                 if y >= vdivs:
                     break
+
         print val_grid
         #begin Puredata connection code:
         print "******************************************"
@@ -104,16 +109,20 @@ def main():
         print tsr
         print "vertical_bar_num: ", vertical_bar_num
         print "v_bar_index_list[vertical_bar_num]: ", v_bar_index_list[vertical_bar_num]
-        sleep(.05)
+        #sleep(.05)
         vertical_bar_num += 1
         if vertical_bar_num >= len(v_bar_index_list)-1:
             vertical_bar_num = 0
-
+        drawtest(frame)
         #vertical_bar_num %= V_DIVS
+        key = cv2.waitKey(30)
+        if key == 27:
+            break
     #kill Sockets and Opencv
     cv2.destroyWindow("preview")
     s.shutdown(0)
     s.close()
+
 
 if __name__ == '__main__':
     main()
